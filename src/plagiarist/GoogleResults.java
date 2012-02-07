@@ -39,7 +39,7 @@ public class GoogleResults {
 	static class Result {
 		private String url;
 		private String title;
-
+	
 		public String getUrl() {
 			return url;
 		}

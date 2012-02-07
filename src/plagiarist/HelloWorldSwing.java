@@ -11,8 +11,10 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -20,7 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class HelloWorldSwing implements ActionListener {
 	// private static String labelText = "Number of button clicks: ";
 	// final JLabel label = new JLabel(labelText + "0    ");
-	JTextArea textArea = new JTextArea();
+	JEditorPane textArea = new JEditorPane();
 	final static String LOOKANDFEEL = null;
 
 	/**
@@ -32,12 +34,11 @@ public class HelloWorldSwing implements ActionListener {
 		button.setMnemonic(KeyEvent.VK_1);
 		button.addActionListener(this);
 		textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
-
-		// label.setLabelFor(button);
+		//textArea.setLineWrap(true);
+		//textArea.setWrapStyleWord(true);
+textArea.setText("Enter suspected text here.");
+		
 		JPanel pane = new JPanel(new GridLayout(0, 1));
-
 		pane.add(textArea);
 		// pane.add(label);
 		pane.add(button);

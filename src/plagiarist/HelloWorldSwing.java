@@ -8,14 +8,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -34,10 +33,10 @@ public class HelloWorldSwing implements ActionListener {
 		button.setMnemonic(KeyEvent.VK_1);
 		button.addActionListener(this);
 		textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-		//textArea.setLineWrap(true);
-		//textArea.setWrapStyleWord(true);
-textArea.setText("Enter suspected text here.");
-		
+		// textArea.setLineWrap(true);
+		// textArea.setWrapStyleWord(true);
+		textArea.setText("Enter suspected text here.");
+
 		JPanel pane = new JPanel(new GridLayout(0, 1));
 		pane.add(textArea);
 		// pane.add(label);
@@ -80,7 +79,12 @@ textArea.setText("Enter suspected text here.");
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Processing processor = new Processing();
-		System.out.print(processor.parseResults(textArea.getText()));
+		try {
+			System.out.print(processor.parseResults(textArea.getText()));
+		} catch (IOException e) {
+			System.err.println("Input invalid.");
+			e.printStackTrace();
+		}
 	}
 
 	private static void initLookAndFeel() {

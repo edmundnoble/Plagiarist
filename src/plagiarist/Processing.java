@@ -11,40 +11,52 @@ import plagiarist.GoogleResults.Result;
 
 import com.google.gson.Gson;
 
-
-
 public class Processing {
+	private int wordsPerParse;
+	private static final String charset = "UTF-8";
 
 	public String parseResults(String args) throws IOException {
 		String[] argarray = args.split(" ");
-		calculateResults(argarray);
-		if (calculateResults(argarray) > 4) {
-
-
-
+		if (argarray.length > 500) {
+			wordsPerParse = 40;
+		} else {
+			wordsPerParse = 20;
 		}
-		return "";
+		int results = calculateResults(argarray, wordsPerParse);
+		if (results > (argarray.length / wordsPerParse)) {
+			return "Almost definitely plagiarism. Consult the student.";
+		} else if (results > argarray.length / (wordsPerParse * 2)) {
+			return "Likely plagiarism. Consult the student.";
+		} else if (results > argarray.length / (wordsPerParse * 5)) {
+			return "Possible plagiarism. Continue investigation.";
+		} else if (results > argarray.length / (wordsPerParse * 10)) {
+			return "Plagiarism unlikely, but possible. Continue investigation.";
+		} else {
+			return "Most likely not plagiarism. Investigation unneeded.";
+		}
 	}
 
-	public int calculateResults(String[] args) throws IOException {
+	private int calculateResults(String[] args, int wordsPerParse)
+			throws IOException {
 		int matches = 0;
-		String str = "";
-		if (args.length > 500) wordsPerParse = args.length / 40;
+		String[] strarray;
 
-		for (int l = 0; l < args.length; l++) {
-
-			for (int i = 0; i + 20 < args.length; i += 21) {
-
-				for (int g = i; g < i + wordsPerParse; g++) {
-					str += " " + args[i];
-				}
-				List<Result> searchResults = search(str);
-				if (searchResults.get(3).getUrl() != null
-						|| searchResults.get(3).getUrl() == "") {
-					matches++;
-				}
+		strarray = new String[wordsPerParse];
+		for (int i = 0; i < args.length - 20; i++) {
+			System.arraycopy(args, i * 20, strarray, 0, wordsPerParse);
+			StringBuffer str = new StringBuffer();
+			for (int l = 0; l < strarray.length; l++) {
+				str.append(strarray[l]);
+				str.append(" ");
 			}
+			Result[] searchResults = (Result[]) search(str.toString()).toArray();
+			if (searchResults.length >= 2) {
+				matches++;
+			}
+			strarray = null;
+			str = null;
 		}
+
 		return matches;
 	}
 
@@ -55,8 +67,7 @@ public class Processing {
 
 		URL url = new URL(google + URLEncoder.encode(search, charset));
 		Reader reader = new InputStreamReader(url.openStream(), charset);
-		GoogleResults results = new Gson()
-				.fromJson(reader, GoogleResults.class);
+		GoogleResults results = new Gson().fromJson(reader, GoogleResults.class);
 
 		// Show title and URL of 1st result.
 
@@ -72,9 +83,4 @@ public class Processing {
 		// return results.getResponseData().getResults();
 		return results.getResponseData().getResults();
 	}
-
-	private final static String charset = "UTF-8";
-	private String[] args;
-	private int wordsPerParse;
-
 }

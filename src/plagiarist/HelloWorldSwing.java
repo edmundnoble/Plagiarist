@@ -1,6 +1,5 @@
 package plagiarist;
 
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -14,14 +13,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class HelloWorldSwing implements ActionListener {
 	// private static String labelText = "Number of button clicks: ";
-	// final JLabel label = new JLabel(labelText + "0    ");
-	JEditorPane textArea = new JEditorPane();
+	final static JLabel label = new JLabel();
+
+	final static JEditorPane textArea = new JEditorPane();
 	final static String LOOKANDFEEL = null;
 
 	/**
@@ -29,6 +29,7 @@ public class HelloWorldSwing implements ActionListener {
 	 * invoked from the event-dispatching thread.
 	 */
 	public Component createComponents() {
+
 		JButton button = new JButton("Check for plagiarism");
 		button.setMnemonic(KeyEvent.VK_1);
 		button.addActionListener(this);
@@ -45,7 +46,6 @@ public class HelloWorldSwing implements ActionListener {
 		return pane;
 	}
 
-
 	private static void createAndShowGUI() {
 		// Set the look and feel.
 		initLookAndFeel();
@@ -56,7 +56,6 @@ public class HelloWorldSwing implements ActionListener {
 		// Create and set up the window.
 		JFrame frame = new JFrame("Plagiarist");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		HelloWorldSwing app = new HelloWorldSwing();
 		Component contents = app.createComponents();
 		frame.getContentPane().add(contents, BorderLayout.CENTER);
@@ -88,43 +87,14 @@ public class HelloWorldSwing implements ActionListener {
 	}
 
 	private static void initLookAndFeel() {
-		String lookAndFeel = null;
-
-		if (LOOKANDFEEL != null) {
-			if (LOOKANDFEEL.equals("Metal")) {
-				lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-			} else if (LOOKANDFEEL.equals("System")) {
-				lookAndFeel = UIManager.getSystemLookAndFeelClassName();
-			} else if (LOOKANDFEEL.equals("Motif")) {
-				lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-			} else if (LOOKANDFEEL.equals("GTK+")) { // new in 1.4.2
-				lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-			} else {
-				System.err
-						.println("Unexpected value of LOOKANDFEEL specified: "
-								+ LOOKANDFEEL);
-				lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-			}
-
-			try {
-				UIManager.setLookAndFeel(lookAndFeel);
-			} catch (ClassNotFoundException e) {
-				System.err
-						.println("Couldn't find class for specified look and feel:"
-								+ lookAndFeel);
-				System.err
-						.println("Did you include the L&F library in the class path?");
-				System.err.println("Using the default look and feel.");
-			} catch (UnsupportedLookAndFeelException e) {
-				System.err.println("Can't use the specified look and feel ("
-						+ lookAndFeel + ") on this platform.");
-				System.err.println("Using the default look and feel.");
-			} catch (Exception e) {
-				System.err.println("Couldn't get specified look and feel ("
-						+ lookAndFeel + "), for some reason.");
-				System.err.println("Using the default look and feel.");
-				e.printStackTrace();
-			}
+		String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
+		} catch (Exception e) {
+			System.err.println("Couldn't get specified look and feel ("
+					+ lookAndFeel + "), for some reason.");
+			System.err.println("Using the default look and feel.");
+			e.printStackTrace();
 		}
 	}
 }
